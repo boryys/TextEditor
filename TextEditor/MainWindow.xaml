@@ -8,9 +8,12 @@
         Title="Text Editor" Height="600" Width="800" MinHeight="500" MinWidth="500" WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
+        <Style x:Key="itemstyle" TargetType="{x:Type ListViewItem}">
+            <EventSetter Event="MouseDoubleClick" Handler="HandleDoubleClick" />
+        </Style>
         <CollectionViewSource x:Key="TextFiles" Source="{Binding}" />
     </Window.Resources>
-    
+
     <Grid Background="#FFF7F0DD">
         <DockPanel>
             <Menu DockPanel.Dock="Top" Height="20">
@@ -34,7 +37,8 @@
 
                     </TabControl>
 
-                    <ListView Name="FolderListView" Margin="10,0,10,10" Grid.Row="1" ItemsSource="{Binding Source={StaticResource TextFiles}}" Background="LightSteelBlue" >
+                    <ListView Name="FolderListView" Margin="10,0,10,10" Grid.Row="1" ItemsSource="{Binding Source={StaticResource TextFiles}}" 
+                              Background="LightSteelBlue" ItemContainerStyle="{StaticResource itemstyle}">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Vertical" Width="120" Height="120" Margin="10" Background="White">

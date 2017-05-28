@@ -12,3 +12,17 @@ C:\Users\UlaBorys\Desktop\Windows Programming\TextEditor\TextEditor\obj\Debug\Te
 C:\Users\UlaBorys\Desktop\Windows Programming\TextEditor\TextEditor\obj\Debug\TextEditor.csproj.GenerateResource.Cache
 C:\Users\UlaBorys\Desktop\Windows Programming\TextEditor\TextEditor\obj\Debug\TextEditor.exe
 C:\Users\UlaBorys\Desktop\Windows Programming\TextEditor\TextEditor\obj\Debug\TextEditor.pdb
+C:\Users\UlaBorys\Desktop\Windows Programming\TextEditor\TextEditor\TextEditor\bin\Debug\TextEditor.exe.config
+C:\Users\UlaBorys\Desktop\Windows Programming\TextEditor\TextEditor\TextEditor\bin\Debug\TextEditor.exe
+C:\Users\UlaBorys\Desktop\Windows Programming\TextEditor\TextEditor\TextEditor\bin\Debug\TextEditor.pdb
+C:\Users\UlaBorys\Desktop\Windows Programming\TextEditor\TextEditor\TextEditor\obj\Debug\TextEditor.csprojResolveAssemblyReference.cache
+C:\Users\UlaBorys\Desktop\Windows Programming\TextEditor\TextEditor\TextEditor\obj\Debug\MainWindow.g.cs
+C:\Users\UlaBorys\Desktop\Windows Programming\TextEditor\TextEditor\TextEditor\obj\Debug\App.g.cs
+C:\Users\UlaBorys\Desktop\Windows Programming\TextEditor\TextEditor\TextEditor\obj\Debug\TextEditor_MarkupCompile.cache
+C:\Users\UlaBorys\Desktop\Windows Programming\TextEditor\TextEditor\TextEditor\obj\Debug\TextEditor_MarkupCompile.lref
+C:\Users\UlaBorys\Desktop\Windows Programming\TextEditor\TextEditor\TextEditor\obj\Debug\MainWindow.baml
+C:\Users\UlaBorys\Desktop\Windows Programming\TextEditor\TextEditor\TextEditor\obj\Debug\TextEditor.g.resources
+C:\Users\UlaBorys\Desktop\Windows Programming\TextEditor\TextEditor\TextEditor\obj\Debug\TextEditor.Properties.Resources.resources
+C:\Users\UlaBorys\Desktop\Windows Programming\TextEditor\TextEditor\TextEditor\obj\Debug\TextEditor.csproj.GenerateResource.Cache
+C:\Users\UlaBorys\Desktop\Windows Programming\TextEditor\TextEditor\TextEditor\obj\Debug\TextEditor.exe
+C:\Users\UlaBorys\Desktop\Windows Programming\TextEditor\TextEditor\TextEditor\obj\Debug\TextEditor.pdb

@@ -68,21 +68,28 @@ namespace TextEditor
             if (result == true)
             {
                 var path = openFileDialog.FileName;
-                StreamReader rd = new StreamReader(path);
 
-                string pathname = System.IO.Path.GetFileName(path);
-                if (pathname.Length > 30) pathname = pathname.Substring(0, 30) + "...";
-
-                TabItem tab = new TabItem();
-                tab.Header = string.Format(pathname);
-
-                System.Windows.Controls.TextBox c = new System.Windows.Controls.TextBox();
-                tab.Content = c;
-
-                c.Text = File.ReadAllText(path);
-
-                TabControl.Items.Add(tab);
+                Read(path);
             }
+        }
+
+        private void Read(string path)
+        {
+            StreamReader rd = new StreamReader(path);
+
+            string pathname = System.IO.Path.GetFileName(path);
+            if (pathname.Length > 30) pathname = pathname.Substring(0, 30) + "...";
+
+            TabItem tab = new TabItem();
+            tab.Header = string.Format(pathname);
+
+            System.Windows.Controls.TextBox c = new System.Windows.Controls.TextBox();
+            tab.Content = c;
+
+            c.Text = File.ReadAllText(path);
+            tab.IsSelected = true;
+
+            TabControl.Items.Add(tab);
         }
 
         private void MenuItem_OpenFolder(object sender, RoutedEventArgs e)
@@ -110,6 +117,13 @@ namespace TextEditor
                     }
                 }
             }
+        }
+
+        protected void HandleDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            TextFile t = (TextFile)((System.Windows.Controls.ListViewItem)sender).Content;
+            string path = t.Path;
+            Read(path);
         }
 
         private void MenuItem_Exit(object sender, RoutedEventArgs e)
