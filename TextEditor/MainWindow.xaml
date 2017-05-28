@@ -1,0 +1,68 @@
+﻿<Window x:Class="TextEditor.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TextEditor"
+        mc:Ignorable="d"
+        Title="Text Editor" Height="600" Width="800" MinHeight="500" MinWidth="500" WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+        <CollectionViewSource x:Key="TextFiles" Source="{Binding}" />
+    </Window.Resources>
+    
+    <Grid Background="#FFF7F0DD">
+        <DockPanel>
+            <Menu DockPanel.Dock="Top" Height="20">
+                <MenuItem Header="_File">
+                    <MenuItem Header="_New" Click="MenuItem_New" />
+                    <MenuItem Header="_Open file" Click="MenuItem_OpenFile" />
+                    <MenuItem Header="_Open folder" Click="MenuItem_OpenFolder" />
+                    <Separator />
+                    <MenuItem Header="_Exit" Click="MenuItem_Exit" />
+                </MenuItem>
+                <MenuItem Header="_About" Click="MenuItem_About" />
+            </Menu>
+            <DockPanel>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="2*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+
+                    <TabControl Name="TabControl" Margin="10" >
+
+                    </TabControl>
+
+                    <ListView Name="FolderListView" Margin="10,0,10,10" Grid.Row="1" ItemsSource="{Binding Source={StaticResource TextFiles}}" Background="LightSteelBlue" >
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Vertical" Width="120" Height="120" Margin="10" Background="White">
+                                    <Border BorderBrush="Black" Background="White">
+                                        <Image Width="90" Height="90" HorizontalAlignment="Center" Margin="5">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="icon.png" />
+                                            </Image.Source>
+                                        </Image>
+                                    </Border>
+                                    <TextBlock Text="{Binding Name}" FontWeight="Regular" HorizontalAlignment="Center" Visibility="Visible"/>
+                                    <StackPanel.Effect>
+                                        <DropShadowEffect BlurRadius="10" ShadowDepth="2"/>
+                                    </StackPanel.Effect>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                        
+                        <ListView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=ListView}}"/>
+                            </ItemsPanelTemplate>
+                        </ListView.ItemsPanel>
+                    </ListView>
+                </Grid>
+            </DockPanel>
+        </DockPanel>
+
+
+    </Grid>
+</Window>
