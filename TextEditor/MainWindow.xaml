@@ -19,6 +19,7 @@
             <Menu DockPanel.Dock="Top" Height="20">
                 <MenuItem Header="_File">
                     <MenuItem Header="_New" Click="MenuItem_New" />
+                    <MenuItem Header="_Save" Click="MenuItem_New" />
                     <MenuItem Header="_Open file" Click="MenuItem_OpenFile" />
                     <MenuItem Header="_Open folder" Click="MenuItem_OpenFolder" />
                     <Separator />
@@ -28,41 +29,75 @@
             </Menu>
             <DockPanel>
                 <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="2*"></RowDefinition>
-                        <RowDefinition Height="*"></RowDefinition>
-                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="3*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
 
-                    <TabControl Name="TabControl" Margin="10" >
+                    <DockPanel Grid.Column="0" Margin="10,12,10,10" >
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="65"></RowDefinition>
+                                <RowDefinition Height="*"></RowDefinition>
+                            </Grid.RowDefinitions>
 
-                    </TabControl>
+                            <StackPanel Grid.Row="0" >
+                                <Border BorderThickness="1" BorderBrush="Black">
+                                    <StackPanel>
+                                        <RadioButton Name="TreeBox" Margin="7,10,0,5" IsChecked="True">Show tree</RadioButton>
+                                        <RadioButton Name="PluginBox" Margin="7,5,0,10">Show plugins</RadioButton>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
 
-                    <ListView Name="FolderListView" Margin="10,0,10,10" Grid.Row="1" ItemsSource="{Binding Source={StaticResource TextFiles}}" 
-                              Background="LightSteelBlue" ItemContainerStyle="{StaticResource itemstyle}">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Vertical" Width="120" Height="120" Margin="10" Background="White">
-                                    <Border BorderBrush="Black" Background="White">
-                                        <Image Width="90" Height="90" HorizontalAlignment="Center" Margin="5">
-                                            <Image.Source>
-                                                <BitmapImage UriSource="icon.png" />
-                                            </Image.Source>
-                                        </Image>
-                                    </Border>
-                                    <TextBlock Text="{Binding Name}" FontWeight="Regular" HorizontalAlignment="Center" Visibility="Visible"/>
-                                    <StackPanel.Effect>
-                                        <DropShadowEffect BlurRadius="10" ShadowDepth="2"/>
-                                    </StackPanel.Effect>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                        
-                        <ListView.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <WrapPanel Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=ListView}}"/>
-                            </ItemsPanelTemplate>
-                        </ListView.ItemsPanel>
-                    </ListView>
+                            <DockPanel Grid.Row="1" Margin="0,10,0,0" Background="PaleGreen">
+                                <Border BorderBrush="Black" BorderThickness="1"></Border>
+                            </DockPanel>
+                        </Grid>
+                    </DockPanel>
+
+
+                    <DockPanel Grid.Column="1">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="2*"></RowDefinition>
+                                <RowDefinition Height="*"></RowDefinition>
+                            </Grid.RowDefinitions>
+
+                            <TabControl Name="TabControl" Margin="0,10,10,10" BorderThickness="1" BorderBrush="Black">
+
+                            </TabControl>
+
+                            <ListView Name="FolderListView" Margin="0,0,10,10" Grid.Row="1" ItemsSource="{Binding Source={StaticResource TextFiles}}" 
+                                      Background="LightSteelBlue" ItemContainerStyle="{StaticResource itemstyle}" BorderThickness="1" BorderBrush="Black"
+                                      ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Vertical" Width="110" Height="110" Margin="10" 
+                                            Background="White">
+                                            <Border BorderBrush="Black" Background="White">
+                                                <Image Width="80" Height="80" HorizontalAlignment="Center" Margin="5">
+                                                    <Image.Source>
+                                                        <BitmapImage UriSource="icon.png" />
+                                                    </Image.Source>
+                                                </Image>
+                                            </Border>
+                                            <TextBlock Text="{Binding Name}" FontWeight="Regular" HorizontalAlignment="Center" Visibility="Visible"/>
+                                            <StackPanel.Effect>
+                                                <DropShadowEffect BlurRadius="10" ShadowDepth="2"/>
+                                            </StackPanel.Effect>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+
+                                <ListView.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=ListView}}"/>
+                                    </ItemsPanelTemplate>
+                                </ListView.ItemsPanel>
+                            </ListView>
+                        </Grid>
+                    </DockPanel>
                 </Grid>
             </DockPanel>
         </DockPanel>

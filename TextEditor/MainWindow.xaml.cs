@@ -101,6 +101,9 @@ namespace TextEditor
                 {
                     string path = dlg.SelectedPath;
                     string[] files = Directory.GetFiles(dlg.SelectedPath);
+
+                    FilesList.Clear();
+
                     foreach (var item in files)
                     {
                         if (System.IO.Path.GetExtension(item) == ".txt")
