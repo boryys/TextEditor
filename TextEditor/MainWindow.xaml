@@ -11,20 +11,34 @@
         <Style x:Key="itemstyle" TargetType="{x:Type ListViewItem}">
             <EventSetter Event="MouseDoubleClick" Handler="HandleDoubleClick" />
         </Style>
+
         <CollectionViewSource x:Key="TextFiles" Source="{Binding}" />
+
+        <Style x:Key="Buttonstyle" TargetType="{x:Type Button}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border CornerRadius="10" Background="LightGreen" BorderThickness="3pt" BorderBrush="DarkGreen" Padding="2" Margin="0,-9,0,0">
+                            <TextBlock Text="Use plugin" FontSize="15" FontWeight="ExtraBold" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
 
     <Grid Background="#FFF7F0DD">
         <DockPanel>
-            <Menu DockPanel.Dock="Top" Height="20">
+            <Menu DockPanel.Dock="Top" Height="Auto">
                 <MenuItem Header="_File">
                     <MenuItem Header="_New" Click="MenuItem_New" />
-                    <MenuItem Header="_Save" Click="MenuItem_New" />
+                    <MenuItem Header="_Save" Click="MenuItem_Save" />
                     <MenuItem Header="_Open file" Click="MenuItem_OpenFile" />
                     <MenuItem Header="_Open folder" Click="MenuItem_OpenFolder" />
                     <Separator />
                     <MenuItem Header="_Exit" Click="MenuItem_Exit" />
                 </MenuItem>
+                <MenuItem Header="Plugins"/>
                 <MenuItem Header="_About" Click="MenuItem_About" />
             </Menu>
             <DockPanel>
@@ -44,18 +58,36 @@
                             <StackPanel Grid.Row="0" >
                                 <Border BorderThickness="1" BorderBrush="Black">
                                     <StackPanel>
-                                        <RadioButton Name="TreeBox" Margin="7,10,0,5" IsChecked="True">Show tree</RadioButton>
-                                        <RadioButton Name="PluginBox" Margin="7,5,0,10">Show plugins</RadioButton>
+                                        <RadioButton Name="TreeBox" Margin="7,10,0,5" Checked="TreeBox_Checked" Unchecked="TreeBox_Unchecked">Show tree</RadioButton>
+                                        <RadioButton Name="PluginBox" Margin="7,5,0,10" Checked="PluginBox_Checked" Unchecked="PluginBox_Unchecked">Show plugins</RadioButton>
                                     </StackPanel>
                                 </Border>
                             </StackPanel>
 
-                            <DockPanel Grid.Row="1" Margin="0,10,0,0" Background="PaleGreen">
-                                <Border BorderBrush="Black" BorderThickness="1"></Border>
+                            <DockPanel Name="TreeView" Grid.Row="1" Margin="0,10,0,0" Background="#B3FFCA">
+                                <Border BorderBrush="Black" BorderThickness="1">
+
+                                </Border>
+                            </DockPanel>
+
+                            <DockPanel Name="PluginView" Grid.Row="1" Margin="0,10" Height="120" Background="#B3FFCA" HorizontalAlignment="Stretch" VerticalAlignment="Top">
+                                <Border BorderBrush="Black" BorderThickness="1">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="30*"></RowDefinition>
+                                            <RowDefinition Height="41*"></RowDefinition>
+                                            <RowDefinition Height="47*"></RowDefinition>
+                                        </Grid.RowDefinitions>
+
+                                        <Label Grid.Row="0" Content="Select plugin:" FontSize="15" FontWeight="ExtraBlack" HorizontalAlignment="Center" Margin="35,0,37,0" Width="104" />
+                                        <ComboBox Grid.Row="1" Margin="10,5,10,10"></ComboBox>
+                                        <Button Style="{StaticResource Buttonstyle}" Margin="10" Grid.Row="2"></Button>
+
+                                    </Grid>
+                                </Border>
                             </DockPanel>
                         </Grid>
                     </DockPanel>
-
 
                     <DockPanel Grid.Column="1">
                         <Grid>
@@ -64,8 +96,19 @@
                                 <RowDefinition Height="*"></RowDefinition>
                             </Grid.RowDefinitions>
 
-                            <TabControl Name="TabControl" Margin="0,10,10,10" BorderThickness="1" BorderBrush="Black">
-
+                            <TabControl Name="MyTabControl" Margin="0,10,10,10" BorderThickness="1" BorderBrush="Black" >
+                                <TabControl.Resources>
+                                    <DataTemplate x:Key="TabHeader" DataType="TabItem">
+                                        <DockPanel>
+                                            <Button Name="DeleteButton" Height="15" Width="15" DockPanel.Dock="Right" Margin="7,0,0,0" Padding="0"  
+                                                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type TabItem}}}"
+                                                    Background="LightGray" Click="DeleteButton_Click" >
+                                                <TextBlock Text ="X" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0"/>
+                                            </Button>
+                                            <TextBlock Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type TabItem}}, Path=Header}" />
+                                        </DockPanel>
+                                    </DataTemplate>
+                                </TabControl.Resources>
                             </TabControl>
 
                             <ListView Name="FolderListView" Margin="0,0,10,10" Grid.Row="1" ItemsSource="{Binding Source={StaticResource TextFiles}}" 
@@ -82,7 +125,7 @@
                                                     </Image.Source>
                                                 </Image>
                                             </Border>
-                                            <TextBlock Text="{Binding Name}" FontWeight="Regular" HorizontalAlignment="Center" Visibility="Visible"/>
+                                            <TextBlock Text="{Binding Name}" Foreground="Black" FontWeight="Regular" HorizontalAlignment="Center" Visibility="Visible"/>
                                             <StackPanel.Effect>
                                                 <DropShadowEffect BlurRadius="10" ShadowDepth="2"/>
                                             </StackPanel.Effect>
@@ -101,7 +144,5 @@
                 </Grid>
             </DockPanel>
         </DockPanel>
-
-
     </Grid>
 </Window>

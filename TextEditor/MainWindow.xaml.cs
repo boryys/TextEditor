@@ -28,18 +28,23 @@ namespace TextEditor
     {
         public string Path { get; set; }
         public string Name { get; set; }
+        public string Content { get; set; }
     }
 
     public partial class MainWindow : Window
     {
         public int counter = 0;
         public ObservableCollection<TextFile> FilesList { get; set; }
-
+        
         public MainWindow()
         {
             InitializeComponent();
 
             FilesList = new ObservableCollection<TextFile>();
+
+            TreeBox.IsChecked = true;
+            PluginView.Visibility = Visibility.Collapsed;
+
             this.DataContext = FilesList;
         }
 
@@ -48,13 +53,34 @@ namespace TextEditor
             counter++;
             TabItem tab = new TabItem();
             tab.Header = string.Format("New file {0}", counter);
-            tab.Name = string.Format("tab{0}", counter);
+            tab.HeaderTemplate = MyTabControl.FindResource("TabHeader") as DataTemplate;
 
             System.Windows.Controls.RichTextBox c = new System.Windows.Controls.RichTextBox();
+            c.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
             tab.Content = c;
             tab.IsSelected = true;
 
-            TabControl.Items.Add(tab);
+            TextFile text = new TextFile();
+            text.Name = string.Format("New file {0}", counter);
+            text.Content = "";
+
+            MyTabControl.Items.Add(tab);
+        }
+
+        private void MenuItem_Save(object sender, RoutedEventArgs e)
+        {
+            TabItem tab = new TabItem();
+            tab = (TabItem)MyTabControl.SelectedItem;
+            System.Windows.Controls.RichTextBox box = new System.Windows.Controls.RichTextBox();
+            box = (System.Windows.Controls.RichTextBox)tab.Content;
+
+            Microsoft.Win32.SaveFileDialog saveFileDialog = new Microsoft.Win32.SaveFileDialog();
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                File.WriteAllText(saveFileDialog.FileName,
+                                  new TextRange(box.Document.ContentStart,
+                                  box.Document.ContentEnd).Text);
+            }
         }
 
         private void MenuItem_OpenFile(object sender, RoutedEventArgs e)
@@ -82,14 +108,20 @@ namespace TextEditor
 
             TabItem tab = new TabItem();
             tab.Header = string.Format(pathname);
+            tab.HeaderTemplate = MyTabControl.FindResource("TabHeader") as DataTemplate;
 
-            System.Windows.Controls.TextBox c = new System.Windows.Controls.TextBox();
+            System.Windows.Controls.RichTextBox c = new System.Windows.Controls.RichTextBox();
             tab.Content = c;
 
-            c.Text = File.ReadAllText(path);
+            c.Document.Blocks.Add(new Paragraph(new Run(File.ReadAllText(path))));
+            c.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
             tab.IsSelected = true;
 
-            TabControl.Items.Add(tab);
+            TextFile text = new TextFile();
+            text.Path = path;
+            text.Name = System.IO.Path.GetFileName(path);
+
+            MyTabControl.Items.Add(tab);
         }
 
         private void MenuItem_OpenFolder(object sender, RoutedEventArgs e)
@@ -137,6 +169,33 @@ namespace TextEditor
         private void MenuItem_About(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.MessageBox.Show("This is simple text editor.", "About");
+        }
+
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            TabItem tab = (TabItem)(sender as System.Windows.Controls.Button).CommandParameter;
+
+            MyTabControl.Items.Remove(tab);
+        }
+
+        private void TreeBox_Checked(object sender, RoutedEventArgs e)
+        {
+            TreeView.Visibility = Visibility.Visible;
+        }
+
+        private void TreeBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            TreeView.Visibility = Visibility.Collapsed;
+        }
+
+        private void PluginBox_Checked(object sender, RoutedEventArgs e)
+        {
+            PluginView.Visibility = Visibility.Visible;
+        }
+
+        private void PluginBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            PluginView.Visibility = Visibility.Collapsed;
         }
     }
 }
