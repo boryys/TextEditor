@@ -35,17 +35,57 @@ namespace TextEditor
     {
         public int counter = 0;
         public ObservableCollection<TextFile> FilesList { get; set; }
-        
+        public ObservableCollection<TextFile> OpenedFilesList { get; set; }
+        private object dummyNode = null;
+
         public MainWindow()
         {
             InitializeComponent();
 
             FilesList = new ObservableCollection<TextFile>();
+            OpenedFilesList = new ObservableCollection<TextFile>();
 
             TreeBox.IsChecked = true;
             PluginView.Visibility = Visibility.Collapsed;
 
             this.DataContext = FilesList;
+
+            
+
+            foreach (string s in Directory.GetLogicalDrives())
+            {
+                TreeViewItem item = new TreeViewItem();
+                item.Header = s;
+                item.Tag = s;
+                item.FontWeight = FontWeights.Normal;
+                item.Items.Add(dummyNode);
+                item.Expanded += new RoutedEventHandler(folder_Expanded);
+                MyTreeView.Items.Add(item);
+            }
+        }
+
+
+        void folder_Expanded(object sender, RoutedEventArgs e)
+        {
+            TreeViewItem item = (TreeViewItem)sender;
+            if (item.Items.Count == 1 && item.Items[0] == dummyNode)
+            {
+                item.Items.Clear();
+                try
+                {
+                    foreach (string s in Directory.GetDirectories(item.Tag.ToString()))
+                    {
+                        TreeViewItem subitem = new TreeViewItem();
+                        subitem.Header = s.Substring(s.LastIndexOf("\\") + 1);
+                        subitem.Tag = s;
+                        subitem.FontWeight = FontWeights.Normal;
+                        subitem.Items.Add(dummyNode);
+                        subitem.Expanded += new RoutedEventHandler(folder_Expanded);
+                        item.Items.Add(subitem);
+                    }
+                }
+                catch (Exception) { }
+            }
         }
 
         private void MenuItem_New(object sender, RoutedEventArgs e)
@@ -64,22 +104,31 @@ namespace TextEditor
             text.Name = string.Format("New file {0}", counter);
             text.Content = "";
 
+            OpenedFilesList.Add(text);
             MyTabControl.Items.Add(tab);
         }
 
         private void MenuItem_Save(object sender, RoutedEventArgs e)
         {
-            TabItem tab = new TabItem();
-            tab = (TabItem)MyTabControl.SelectedItem;
-            System.Windows.Controls.RichTextBox box = new System.Windows.Controls.RichTextBox();
-            box = (System.Windows.Controls.RichTextBox)tab.Content;
+            TabItem tab = (TabItem)MyTabControl.SelectedItem;
+            int i = MyTabControl.Items.IndexOf(tab);
 
-            Microsoft.Win32.SaveFileDialog saveFileDialog = new Microsoft.Win32.SaveFileDialog();
-            if (saveFileDialog.ShowDialog() == true)
+            if (tab != null && OpenedFilesList.ElementAt(i).Path != null)
             {
-                File.WriteAllText(saveFileDialog.FileName,
-                                  new TextRange(box.Document.ContentStart,
-                                  box.Document.ContentEnd).Text);
+                System.Windows.Controls.RichTextBox box = (System.Windows.Controls.RichTextBox)tab.Content;
+
+                Microsoft.Win32.SaveFileDialog saveFileDialog = new Microsoft.Win32.SaveFileDialog();
+
+                string name = System.IO.Path.GetFileNameWithoutExtension(OpenedFilesList.ElementAt(i).Path);
+                saveFileDialog.FileName = name + "(1)";
+                saveFileDialog.Filter = "Text file (*.txt)|*.txt|C# file (*.cs)|*.cs";
+
+                if (saveFileDialog.ShowDialog() == true)
+                {
+                    File.WriteAllText(saveFileDialog.FileName,
+                                      new TextRange(box.Document.ContentStart,
+                                      box.Document.ContentEnd).Text);
+                }
             }
         }
 
@@ -121,6 +170,7 @@ namespace TextEditor
             text.Path = path;
             text.Name = System.IO.Path.GetFileName(path);
 
+            OpenedFilesList.Add(text);
             MyTabControl.Items.Add(tab);
         }
 
@@ -180,12 +230,12 @@ namespace TextEditor
 
         private void TreeBox_Checked(object sender, RoutedEventArgs e)
         {
-            TreeView.Visibility = Visibility.Visible;
+            MyTreeView.Visibility = Visibility.Visible;
         }
 
         private void TreeBox_Unchecked(object sender, RoutedEventArgs e)
         {
-            TreeView.Visibility = Visibility.Collapsed;
+            MyTreeView.Visibility = Visibility.Collapsed;
         }
 
         private void PluginBox_Checked(object sender, RoutedEventArgs e)
@@ -196,6 +246,31 @@ namespace TextEditor
         private void PluginBox_Unchecked(object sender, RoutedEventArgs e)
         {
             PluginView.Visibility = Visibility.Collapsed;
+        }
+
+        private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            System.Windows.Controls.TreeView tree = sender as System.Windows.Controls.TreeView;
+            TreeViewItem item = tree.SelectedItem as TreeViewItem;
+
+            string[] files = Directory.GetFiles(item.Tag as string);
+
+            FilesList.Clear();
+
+            foreach (var i in files)
+            {
+                if (System.IO.Path.GetExtension(i) == ".txt")
+                {
+                    var file = new TextFile();
+                    file.Path = i;
+
+                    string n = System.IO.Path.GetFileName(i);
+                    if (n.Length > 15) file.Name = n.Substring(0, 15) + "...";
+                    else file.Name = n;
+
+                    FilesList.Add(file);
+                }
+            }
         }
     }
 }
