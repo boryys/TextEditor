@@ -31,6 +31,23 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+
+        <Style TargetType="FrameworkElement" x:Key="VisibleAnimation">
+            <Setter Property="Opacity" Value="0"/>
+            <Style.Triggers>
+                <Trigger Property="Visibility" Value="Visible">
+                    <Trigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                             From="0.0" To="1.0" Duration="0:0:1"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.EnterActions>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        
     </Window.Resources>
 
     <Grid Background="#FFF7F0DD">
@@ -71,7 +88,7 @@
                             </StackPanel>
 
                             <TreeView Name="MyTreeView"  Grid.Row="1" Margin="0,10,0,0" SelectedItemChanged="TreeView_SelectedItemChanged"
-                                      Background="#B3FFCA" BorderBrush="Black" BorderThickness="1" >
+                                      Background="#B3FFCA" BorderBrush="Black" BorderThickness="1" Style="{StaticResource VisibleAnimation}">
                                 <TreeView.Resources>
                                     <Style TargetType="{x:Type TreeViewItem}">
                                         <Setter Property="HeaderTemplate">
@@ -87,7 +104,8 @@
                                 </TreeView.Resources>
                             </TreeView>
 
-                            <DockPanel Name="PluginView" Grid.Row="1" Margin="0,10" Height="120" Background="#B3FFCA" HorizontalAlignment="Stretch" VerticalAlignment="Top">
+                            <DockPanel Name="PluginView" Grid.Row="1" Margin="0,10" Height="120" Background="#B3FFCA" 
+                                       HorizontalAlignment="Stretch" VerticalAlignment="Top" Style="{StaticResource VisibleAnimation}">
                                 <Border BorderBrush="Black" BorderThickness="1">
                                     <Grid>
                                         <Grid.RowDefinitions>
